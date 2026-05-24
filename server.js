@@ -21,13 +21,15 @@ app.post('/api/checkout', async (req, require) => {
     try {
         // --- MEGAPAY INTEGRATION ---
         // Replace these placeholders with your actual MegaPay credentials
-        const MEGAPAY_API_URL = "https://api.megapay.co.ke/v1/stkpush"; 
+        const MEGAPAY_API_URL = "https://megapay.co.ke/backend/v1/initiatestk"; 
         const MEGAPAY_API_KEY = process.env.MEGAPAY_API_KEY || "MGPYRu4uPLfA";
         const MEGAPAY_MERCHANT_ID = process.env.MEGAPAY_MERCHANT_ID || "8919166";
 
 
         const response = await axios.post(MEGAPAY_API_URL, {
             merchant_id: MEGAPAY_MERCHANT_ID,
+            api_key: MEGAPAY_API_KEY,
+            email: process.env.MEGAPAY_EMAIL || "8804ivanluinsco@gmail.com",
             amount: amount,
             phone: formattedPhone,
             reference: `${service.toUpperCase()}-${packageSize}`,
