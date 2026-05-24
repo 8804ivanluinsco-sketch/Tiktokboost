@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // MegaPay STK Push Integration Endpoint
 app.post('/api/checkout', async (req, require) => {
     
+    const { phone, amount, service, packageSize } = req.body;
     // Format phone to 254XXXXXXXXX
     let formattedPhone = phone.trim().replace(/[\s+]/g, '');
     if (formattedPhone.startsWith('0')) {
@@ -20,38 +21,46 @@ app.post('/api/checkout', async (req, require) => {
     }
     
     try {
-        const { phone, amount, service, packageSize } = req.body;
+        // Airtight local credential validation block
+        if (!process.env.MEGAPAY_API_KEY || !process.env.MEGAPAY_MERCHANT_ID) {
+            console.error("--- MEGAPAY CONFIGURATION ERROR ---");
+            console.error("API Keys are missing from your local environment setup!");
+            console.error("-----------------------------------");
+            return res.status(500).json({
+                success: false,
+                message: "Server configuration missing payment gateway credentials."
+            });
+        }
+        console.log("Incoming request payload:", req.body);
         // --- MEGAPAY INTEGRATION ---
         // Replace these placeholders with your actual MegaPay credentials
         const MEGAPAY_API_URL = "https://megapay.co.ke/backend/v1/initiatestk"; 
-
+        const MEGAPAY_API_KEY = "MGPYRu4uPLfA";
+        const MEGAPAY_MERCHANT_ID = "8919166";
+        const MEGAPAY_EMAIL = "8804ivanluinsco@gmail.com";
 
         const response = await axios.post(MEGAPAY_API_URL, {
-            api_key: process.env.MEGAPAY_API_KEY || "MGPYRu4uPLfA",
-            email: process.env.MEGAPAY_EMAIL || "8804ivanluinsco@gmail.com",
+            api_key: "MGPYRu4uPLfA",
+            email:"8804ivanluinsco@gmail.com",
             amount: amount,
-            phone: formattedPhone,
+            msisdn: formattedPhone,
             reference: `${service.toUpperCase()}-${packageSize}`,
             description: `Payment for TikTok ${service}`,
             callback_url: "https://tiktokboost-9hks.onrender.com/api/callback"
         }, {
             headers: { 'Authorization': `Bearer ${MEGAPAY_API_KEY}` }
         });
-        
 
-        // Simulating successful STK initialization for local testing
-        setTimeout(() => {
-            return res.status(200).json({
-                success: true,
-                message: "STK Push prompt sent successfully! Please enter your M-Pesa PIN."
-            });
-        }, 2000);
+    }catch (error) {
+        // CRITICAL: This catch block stops the 502 server crash!
+        console.error("--- MEGAPAY API CRASH DETAILS ---");
+        console.error(error.response?.data || error.message || error);
+        console.error("---------------------------------");
 
-    } catch (error) {
-        console.error("MegaPay Error:", error.response?.data || error.message);
-        res.status(500).json({
-            success: false,
-            message: "Payment gateway failed. Please try again later."
+        // Send a clean error status code back to the frontend instead of crashing
+        return res.status(500).json({ 
+            success: false, 
+            message: "The server encountered an error processing the payment gateway request." 
         });
     }
 });
