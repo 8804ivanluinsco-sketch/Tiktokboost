@@ -134,15 +134,27 @@ async function handlePayment(event) {
             })
         });
 
-        const data = await response.json();
+        // 1. Check if the server returned a failing status code
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Backend HTML/Text Error Response:", errorText);
+            alert(`Server error (${response.status}). Check your VS Code terminal for details.`);
+            return;
+        }
+
+        // 2. Safely read text first to prevent unexpected crashes
+        const rawText = await response.text();
+        if (!rawText) {
+            throw new Error("Server returned a completely empty response.");
+        }
+
+        // 3. Now parse it manually
+        const data = JSON.parse(rawText);
 
         if (data.success) {
             alert(data.message);
-            
-            // Note protection enforcement strategy rule: Save limit restrictions
             localStorage.setItem(activeOrder.uniqueCardId, 'true');
             
-            // Re-render components dynamically to disable clicked options
             const currentCardButton = document.querySelector(`#card-${activeOrder.uniqueCardId} button`);
             if (currentCardButton) {
                 currentCardButton.disabled = true;
@@ -156,8 +168,9 @@ async function handlePayment(event) {
             alert(data.message || "An error occurred while pushing transaction request.");
         }
     } catch (err) {
-        console.error(err);
-        alert("Network execution failure. Please try again.");
+        console.error("Caught Frontend Error:", err);
+        alert(`Payment error: ${err.message}`);
+    
     } finally {
         // Disable Live Loading State
         btn.disabled = false;
