@@ -10,30 +10,37 @@
         body { background-color: #010101; font-family: system-ui, -apple-system, sans-serif; }
         .tiktok-gradient { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); }
         .card-glow:hover { box-shadow: 0 0 20px rgba(254, 44, 85, 0.2); }
+        
+        /* Shimmer animation keyframe fix */
+        @keyframes shimmer {
+            0% { transform: scaleX(0); transform-origin: left; }
+            50% { transform: scaleX(1); transform-origin: left; }
+            50.1% { transform-origin: right; }
+            100% { transform: scaleX(0); transform-origin: right; }
+        }
+        .animate-shimmer {
+            animation: shimmer 1.5s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="text-white antialiased min-h-screen relative overflow-x-hidden">
 
-    <!-- 1. SPLASH SCREEN PAGE -->
-    <div id="splash-screen" class="fixed inset-0 bg-[#010101] z-50 flex flex-col items-center justify-center transition-all duration-700 opacity-100 visibility-visible">
+    <div id="splash-screen" class="fixed inset-0 bg-[#010101] z-50 flex flex-col items-center justify-center transition-all duration-700 opacity-100 visible">
         <div class="transform scale-110 animate-pulse text-center">
-            <!-- TikTok SVG White Logo -->
             <svg class="w-24 h-24 mx-auto fill-current text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]" viewBox="0 0 24 24">
                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.15 1.16 1.25 2.8 1.98 4.51 2.13v3.83c-1.46-.06-2.92-.51-4.14-1.33-.28-.2-.55-.42-.79-.66v6.78c.03 3.9-2.73 7.42-6.59 8.04-4.57.84-8.86-2.29-9.52-6.85-.75-4.45 2.11-8.79 6.51-9.62.91-.18 1.84-.2 2.76-.05v3.91c-.6-.17-1.24-.19-1.85-.06-1.95.37-3.26 2.21-2.93 4.19.3 2.11 2.31 3.52 4.42 3.16 1.66-.26 2.86-1.68 2.86-3.36V0l.02.02z"/>
             </svg>
             <h1 class="text-xl tracking-[0.3em] font-black uppercase mt-6 text-white/90">TokBoost</h1>
             <div class="mt-4 flex justify-center">
-                <div class="w-12 h-1 bg-white rounded-full overflow-hidden">
-                    <div class="w-full h-full bg-slate-400 origin-left scale-x-0 animate-[shimmer_1.5s_infinite_ease-in-out]" style="animation-name: shimmer; border-radius: 9999px;"></div>
+                <div class="w-12 h-1 bg-white/20 rounded-full overflow-hidden">
+                    <div class="w-full h-full bg-slate-400 animate-shimmer rounded-full"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. MAIN STOREFRONT PAGE (Hidden initially) -->
     <div id="main-store" class="hidden max-w-5xl mx-auto px-4 py-8 opacity-0 transition-opacity duration-700">
         
-        <!-- Header -->
         <header class="text-center mb-12 border-b border-zinc-800 pb-6">
             <div class="flex items-center justify-center gap-2 mb-2">
                 <svg class="w-8 h-8 fill-current text-[#FE2C55]" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.15 1.16 1.25 2.8 1.98 4.51 2.13v3.83c-1.46-.06-2.92-.51-4.14-1.33-.28-.2-.55-.42-.79-.66v6.78c.03 3.9-2.73 7.42-6.59 8.04-4.57.84-8.86-2.29-9.52-6.85-.75-4.45 2.11-8.79 6.51-9.62.91-.18 1.84-.2 2.76-.05v3.91c-.6-.17-1.24-.19-1.85-.06-1.95.37-3.26 2.21-2.93 4.19.3 2.11 2.31 3.52 4.42 3.16 1.66-.26 2.86-1.68 2.86-3.36V0l.02.02z"/></svg>
@@ -42,43 +49,37 @@
             <p class="text-zinc-400 text-sm">Instant, high-retention organic growth packages</p>
         </header>
 
-        <!-- Service Sections Wrapper -->
         <div class="space-y-14">
-            <!-- Followers Section -->
             <section>
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-l-4 border-[#FE2C55] pl-3">
                     <i class="fa-solid fa-users text-[#FE2C55]"></i> TikTok Followers
                 </h2>
-                <div id="followers-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                <div id="followers-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             </section>
 
-            <!-- Likes Section -->
             <section>
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-l-4 border-[#25F4EE] pl-3">
                     <i class="fa-solid fa-heart text-[#25F4EE]"></i> TikTok Likes
                 </h2>
-                <div id="likes-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                <div id="likes-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             </section>
 
-            <!-- Views Section -->
             <section>
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-l-4 border-white pl-3">
                     <i class="fa-solid fa-eye text-white"></i> TikTok Views
                 </h2>
-                <div id="views-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                <div id="views-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             </section>
 
-            <!-- Comments Section -->
             <section>
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-l-4 border-amber-400 pl-3">
                     <i class="fa-solid fa-comment text-amber-400"></i> TikTok Comments
                 </h2>
-                <div id="comments-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                <div id="comments-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
             </section>
         </div>
     </div>
 
-    <!-- 3. CHECKOUT MODAL OVERLAY -->
     <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-[#121212] border border-zinc-800 w-full max-w-md rounded-2xl p-6 relative transform scale-95 transition-transform duration-300">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-xl">
@@ -88,7 +89,6 @@
             <h3 class="text-xl font-black mb-1">Secure Checkout</h3>
             <p class="text-xs text-zinc-400 mb-6">MegaPay STK Push Instant Processing</p>
 
-            <!-- Order Summary Card -->
             <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl mb-6 flex justify-between items-center">
                 <div>
                     <span id="summary-service" class="block text-xs font-bold uppercase tracking-wider text-[#25F4EE]">Followers</span>
@@ -100,7 +100,6 @@
                 </div>
             </div>
 
-            <!-- Input Fields Form -->
             <form id="payment-form" onsubmit="handlePayment(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">TikTok Handle</label>
@@ -116,7 +115,6 @@
                     <p class="text-[10px] text-zinc-500 mt-1">Ensure this phone is online to receive the STK PIN prompt.</p>
                 </div>
 
-                <!-- Pay Button with Live Loading State -->
                 <button type="submit" id="submit-pay-btn" class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-zinc-200 transition-colors flex items-center justify-center gap-3 mt-2">
                     <span id="btn-text">Initialize M-Pesa STK Push</span>
                     <div id="btn-spinner" class="hidden w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
@@ -125,5 +123,6 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
