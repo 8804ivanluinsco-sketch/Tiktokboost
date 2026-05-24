@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const PORT = 3000;
 const app = express();
 const axios = require('axios');
 const path = require('path');
@@ -67,5 +68,4 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running smoothly on port ${PORT}`));
