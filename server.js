@@ -1,15 +1,15 @@
+require('dotenv').config();
 const express = require('express');
+const app = express();
 const axios = require('axios');
 const path = require('path');
-const app = express();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MegaPay STK Push Integration Endpoint
 app.post('/api/checkout', async (req, require) => {
-    const { phone, amount, service, packageSize } = req.body;
-
+    
     // Format phone to 254XXXXXXXXX
     let formattedPhone = phone.trim().replace(/[\s+]/g, '');
     if (formattedPhone.startsWith('0')) {
@@ -17,8 +17,9 @@ app.post('/api/checkout', async (req, require) => {
     } else if (formattedPhone.startsWith('7') || formattedPhone.startsWith('1')) {
         formattedPhone = '254' + formattedPhone;
     }
-
+    
     try {
+        const { phone, amount, service, packageSize } = req.body;
         // --- MEGAPAY INTEGRATION ---
         // Replace these placeholders with your actual MegaPay credentials
         const MEGAPAY_API_URL = "https://megapay.co.ke/backend/v1/initiatestk"; 
