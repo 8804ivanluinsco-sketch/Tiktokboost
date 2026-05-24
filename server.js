@@ -25,18 +25,18 @@ app.post('/api/checkout', async (req, require) => {
         const MEGAPAY_API_KEY = process.env.MEGAPAY_API_KEY || "MGPYRu4uPLfA";
         const MEGAPAY_MERCHANT_ID = process.env.MEGAPAY_MERCHANT_ID || "8919166";
 
-        /*
+
         const response = await axios.post(MEGAPAY_API_URL, {
             merchant_id: MEGAPAY_MERCHANT_ID,
             amount: amount,
             phone: formattedPhone,
             reference: `${service.toUpperCase()}-${packageSize}`,
             description: `Payment for TikTok ${service}`,
-            callback_url: "https://your-render-app-url.onrender.com/api/callback"
+            callback_url: "https://tiktokboost-9hks.onrender.com/api/callback"
         }, {
             headers: { 'Authorization': `Bearer ${MEGAPAY_API_KEY}` }
         });
-        */
+        
 
         // Simulating successful STK initialization for local testing
         setTimeout(() => {
