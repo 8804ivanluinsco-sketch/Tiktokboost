@@ -398,7 +398,7 @@
 
             setTimeout(() => {
                 localStorage.setItem("active_order_ref", referenceInput);
-                window.location.href = "index.html";
+                window.location.href = "home.html";
             }, 7000);
 
             // Stash the reference locally and transition immediately to the storefront
@@ -406,7 +406,7 @@
 
         function skipVerification() {
             localStorage.removeItem("active_order_ref");
-            window.location.href = "index.html";
+            window.location.href = "home.html";
         }
         // 6. Native Auto-Jump Sequence Flow for Underlined Inputs
         function trackPinSequence(e) {
